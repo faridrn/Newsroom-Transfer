@@ -1,66 +1,103 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>{Title}</title>
-        <meta name="description" content="{Description}">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/style.css">
-        <!--[if lt IE 10]><script src="js/modernizr-2.6.2.min.js"></script><![endif]-->
-    </head>
-    <body>
-        <header id="header">
-            <div class="wrapper">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-        <section id="main">
-            <div class="wrapper">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <footer id="footer">
-            <div class="wrapper">
-                <div class="container">
-                    <div id="sitemap" class="row">
-                        <div class="col-xs-12 col-sm-8">
-                            <nav class="footemnenu">
-                                <ul class="list-unstyled list-inline">
-                                    <li><a href="#"></a></li>
-                                </ul>
-                            </nav>
-                        </div>
-                        <div class="col-xs-12 col-sm-4">
-                            <div class="text-left">
-                                {Footet Logo}
-                            </div>
-                        </div>
-                    </div>
-                    <div id="copyright" class="row">
-                        <div class="col-xs-12 text-center">
-                            &copy; Copyright
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </footer>
-        <script src="js/jquery-1.11.1.min.js"></script>
-        <script src="js/main.js"></script>
-    </body>
+<!--[if lt IE 7]>	<html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>		<html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>		<html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<title>Newsroom Transfer</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="css/style.css" />
+		<script src="js/modernizr-2.6.2.min.js"></script>
+	</head>
+	<body>
+		<header id="header">
+			<div class="wrapper _white">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+		<section id="mainbody">
+			<div class="wrapper">
+				<div class="container">
+					<div class="row">
+						<div class="col-xs-12">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<footer id="footer">
+			<div class="wrapper">
+				<div class="container">
+					<div class="row copyright">
+						<div class="col-xs-12">
+							&copy; 2015 PressTV. All rights reserved.
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+		<div class="modal fade zoom-out" id="user-form" tabindex="-1" role="dialog" aria-labelledby="Login / Register" aria-hidden="true">
+			<div class="modal-dialog">
+				<div id="user-form-inner" class="modal-content" role="tabpanel">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<ul class="nav nav-tabs" role="tablist">
+							<li role="presentation" class="active"><a href="#user-login" aria-controls="user-login" role="tab" data-toggle="tab"><i class="icon-user"></i>&nbsp;Login</a></li>
+							<li role="presentation"><a href="#user-register" aria-controls="user-register" role="tab" data-toggle="tab"><i class="icon-register"></i>&nbsp;Register</a></li>
+						</ul>
+					</div>
+					<div class="modal-body">
+						<div class="tab-content">
+							<div role="tabpanel" class="tab-pane fade in active" id="user-login">
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="text" name="username" class="form-control" placeholder="Username" />
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" class="form-control" placeholder="Password" />
+									</div>
+									<div class="form-group text-center">
+										<button type="submit" class="btn btn-success">Login</button>
+									</div>
+								</form>
+							</div>
+							<div role="tabpanel" class="tab-pane" id="user-register">
+								<form action="#" method="post">
+									<div class="form-group">
+										<input type="text" name="username" class="form-control" placeholder="Name" />
+									</div>
+									<div class="form-group">
+										<input type="text" name="username" class="form-control" placeholder="Username" />
+									</div>
+									<div class="form-group">
+										<input type="email" name="email" class="form-control" placeholder="Email" />
+									</div>
+									<div class="form-group">
+										<input type="password" name="password" class="form-control" placeholder="Password" />
+									</div>
+									<div class="form-group text-center">
+										<button type="submit" class="btn btn-success">Register</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/owl.carousel.min.js"></script>
+		<script src="js/iran.min.js"></script>
+	</body>
 </html>
