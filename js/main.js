@@ -62,6 +62,11 @@ var Template = {
 	var template = Handlebars.compile(source);
 	var html     = template(data);
 	position.html(html);
+	Template.afterCompile(html);
+    }
+    , afterCompile: function(html) {
+	if (html.indexOf("\"nano") !== -1)
+	    $(".nano").nanoScroller({flash:true,preventPageScrolling:true,tabIndex:0});
     }
 };
 var Data = {
