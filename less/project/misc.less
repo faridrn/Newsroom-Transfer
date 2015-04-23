@@ -37,3 +37,20 @@ a {
     margin-top: 0; border: 0 none; padding: 0;
     h2, h3 { margin: 0; }
 }
+
+
+.chevron {
+    position: relative; top: 50%;
+    &:before, &:after { display: block; content: ''; width: 16px; height: 6px; background: @gray; position: absolute; left: 0; transition: all 0.2s; }
+    &:hover {
+	&:before, &:after { background: lighten(@gray-light, 15%); }
+    }
+    &.left {
+	&:before { transform: rotate(-55deg); top: 0; }
+	&:after { transform: rotate(55deg); top: 10px; }
+    }
+    &.right {
+	&:before { transform: rotate(-55deg); top: 10px; }
+	&:after { transform: rotate(55deg); top: 0px; }
+    }
+}
