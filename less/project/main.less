@@ -1,80 +1,108 @@
 body {
     & > * { position: relative; }
+    #page { height: 100%; }
     #header { z-index: 97; }
-    #mainbody { z-index: 98; }
-    #footer { z-index: 99; }
+    #mainbody { z-index: 98; position: relative; height: 100%; padding-top: 70px; }
+    #footer { z-index: 99;  }
 }
 .container {
-    box-shadow: 0 8px 8px #ccc; background: #fff; height: 100%; position: relative;
+    box-shadow: 0 0px 8px #ababab; background: #fff; height: 80vh; position: relative; margin-top: 10vh; position: relative;
 }
 
 #left, #center, #right { padding-top: 20px; }
 #left {
-    background: #111344; height: 100%; width: 25%; position: absolute; top: 0; left: 0; padding: 0 (@grid-gutter-width / 2);
-}
-#center, #right { margin-top: -65px; }
-
-.user {
-    position: relative; margin-bottom: 30px;
-    .img {
-	float: left; width: 80px;
-	img { display: block; }
+    background: #111344; height: 100%; width: 25%; position: absolute; top: 0; left: 0; padding: 80px (@grid-gutter-width / 2) 0; z-index: 99;
+    .left-inner { height: 100%; position: relative; }
+    .user {
+	position: relative; margin-bottom: 30px; z-index: 121;
+	.img {
+	    float: left; width: 80px;
+	    img { display: block; }
+	}
+	.overlay {
+	    color: #fff; line-height: 1.2; margin-left: 90px;
+	    .name { line-height: 1.3; }
+	    .position { font-size: 13px; margin-bottom: 10px; }
+	    .city, .company { font-size: 12px; }
+	    .logout {
+		font-size: 10px; position: absolute; right: 0; top: 0px; cursor: pointer; opacity: 0.4; transition: all 0.2s;
+		.close { float: none; font-size: 12px; color: #eee; text-shadow: none; opacity: 1; }
+		&:hover { opacity: 0.8 }
+	    }
+	}
     }
-    .overlay {
-	color: #fff; line-height: 1.2; margin-left: 90px;
-	.name { line-height: 1.3; }
-	.position { font-size: 13px; margin-bottom: 10px; }
-	.city, .company { font-size: 12px; }
+    .search {
+	margin-bottom: 20px; position: relative; z-index: 120;
+	.form-group {
+	    position: relative; width: 100%;
+	    .btn { position: absolute; top: 0; right: 0; }
+	}
     }
-}
-.search {
-    margin-bottom: 20px;
-    .form-group {
-	position: relative; width: 100%;
-	.btn { position: absolute; top: 0; right: 0; }
-    }
-}
-.conversation {
-    .date {
-	&::before { position: absolute; content: ''; display: block; top: 50%; margin-top: -1px; background: @gray-lighter; width: 100%; height: 1px; z-index: 80; }
-	position: relative; text-align: center; font-size: 12px; color: @gray;
-	span { background: #fff; position: relative; z-index: 100; padding: 0 5px; }
-    }
-}
-
-.media {
-    margin-bottom: 20px; margin-top: 0;
-    .media-object { width: 50px; }
-    .media-heading { font-size: 14px; text-indent: 10px; }
-    .bubble {
-	background: @gray-lighter; padding: 5px; font-size: 12px; position: relative; margin-left: 10px; z-index: 79;
-	&::before { display: block; position: absolute; top: 10px; left: -7px; width: 14px; height: 14px; background: @gray-lighter; content: ''; transform: rotate(45deg); z-index: -1; }
-    }
-    &.response {
-	.media-heading { text-align: right; font-size: 14px; padding-right: 10px; }
-	.bubble {
-	    margin-left: 0; margin-right: 10px; background: lighten(@blueIcons, 40%);
-	    &::before { right: -7px; left: auto; background: lighten(@blueIcons, 40%); }
+    #results {
+	height: 100%; width: 100%; position: absolute; top: 0; left: 0; padding: 155px 0 40px;
+	.results {
+	    height: 100%; width: 100%;
+	    .results-container {
+		background: #efefef; height: 100%;
+		.nano {
+		    .nano-content {
+			.results-list {
+			    ul {
+				li {
+				    padding: 8px 8px 8px 26px; cursor: pointer; height: 36px; overflow: hidden;
+				    & ~ li { border-top: 1px solid @gray; }
+				    span {
+					display: block; position: relative;
+					&:after { display: block; content: ''; position: absolute; left: -16px; top: 50%; width: 8px; height: 8px; background: tomato; border-radius: 100%; margin-top: -4px; background: @gray; }
+				    }
+				    &:hover, &.active {
+					span:after { background: lighten(@gray-light, 15%); }
+				    }
+				}
+			    }
+			}
+		    }
+		}
+	    }
 	}
     }
 }
-.item-form {
-    position: relative; padding-right: 60px;
-    #item-textarea { font-size: 13px; line-height: 1.2; }
-    .btn { position: absolute; bottom: 0; right: 0; height: 100%; width: 60px; line-height: 60px; padding: 0; }
-}
 
-#results {
-    .results {
-	.results-container {
-	    height: 400px; background: #efefef;
-	    .nano {
-
-		.nano-content {
-		    .results-list {
-
-		    }
-		}
+#center {
+    height: 100%;
+    #conversation {
+	margin-top: -65px; height: 100%; padding-bottom: 140px;
+	.conversation {
+	    height: 100%;
+	    .conversation-container {
+		height: 100%;
+	    }
+	    .date {
+		&::before { position: absolute; content: ''; display: block; top: 50%; margin-top: -1px; background: lighten(@gray-lighter, 2%); width: 100%; height: 1px; z-index: 80; }
+		position: relative; text-align: center; font-size: 12px; color: @gray;
+		span { background: #fff; position: relative; z-index: 100; padding: 0 5px; font-size: 10px; }
+	    }
+	    .content { padding-right: 20px; }
+	}
+	.item-form {
+	    position: relative; padding-right: 60px;
+	    #item-textarea { font-size: 13px; line-height: 1.2; resize: none; }
+	    .btn { position: absolute; bottom: 0; right: 0; height: 100%; width: 60px; line-height: 60px; padding: 0; }
+	}
+    }
+    .media {
+	margin-bottom: 20px; margin-top: 0;
+	.media-object { width: 50px; }
+	.media-heading { font-size: 14px; text-indent: 10px; }
+	.bubble {
+	    background: @gray-lighter; padding: 5px; font-size: 12px; position: relative; margin-left: 10px; z-index: 79;
+	    &::before { display: block; position: absolute; top: 10px; left: -7px; width: 14px; height: 14px; background: @gray-lighter; content: ''; transform: rotate(45deg); z-index: -1; }
+	}
+	&.response {
+	    .media-heading { text-align: right; font-size: 14px; padding-right: 10px; }
+	    .bubble {
+		margin-left: 0; margin-right: 10px; background: lighten(@blueIcons, 40%);
+		&::before { right: -7px; left: auto; background: lighten(@blueIcons, 40%); }
 	    }
 	}
     }

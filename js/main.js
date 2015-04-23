@@ -52,8 +52,8 @@ var Template = {
     }
     , showPlaces: function() {
 	$.each(Map.places, function(i, place) {
-	    if ($('#' + place).length) {
-		$('#' + place).removeClass('hide');
+	    if ($(place).length) {
+		$(place).removeClass('hide');
 	    }
 	});
     }
@@ -66,7 +66,7 @@ var Template = {
     }
     , afterCompile: function(html) {
 	if (html.indexOf("\"nano") !== -1)
-	    $(".nano").nanoScroller({flash:true,preventPageScrolling:true,tabIndex:0});
+	    $(".nano").nanoScroller({flash: true, preventPageScrolling: true, tabIndex: 0});
     }
 };
 var Data = {
@@ -198,7 +198,7 @@ var Global = {
 };
 var Map = {
     templates: 'data/templates.html'
-    , places: ['header', 'mainbody', 'footer']
+    , places: ['.wrapper']
     , positions: {
 	user: {id: "#user", template: "user"}
 	, search: {id: "#search", template: "search"}
