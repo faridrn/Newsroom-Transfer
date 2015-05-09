@@ -2,7 +2,7 @@ var token = '1';
 $(function() {
     // Check for credentials
     // if user is logged in start the app
-    if (token === '') {
+    if (token !== '') {
 	$("#login-form").modal({
 	    backdrop: 'static'
 	    , keyboard: false
