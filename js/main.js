@@ -198,6 +198,10 @@ var Global = {
 };
 var Map = {
     templates: 'data/templates.html'
+    , services: {
+	base: 'http://192.168.103.208/Assignment.svc/'
+	, login: 'login'
+    }
     , places: ['.wrapper']
     , positions: {
 	user: {id: "#user", template: "user"}
@@ -210,6 +214,14 @@ var Map = {
 $(document).on('click', "#login-anchor", function(e) {
     // request for token
     var s = true;
+    $.ajax({
+	url: Map.services.base + Map.services.login
+	, data: $("#login-form").serialize()
+	, success: function(d) {
+	    alert(d);
+	}
+    });
+    return false;
     if (s) {
 	$("#login-form").find(".alert").addClass('hide');
 	$("#login-form").modal('hide');
