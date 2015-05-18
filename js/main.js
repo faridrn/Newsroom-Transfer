@@ -199,7 +199,7 @@ var Global = {
 var Map = {
     templates: 'data/templates.html'
     , services: {
-	base: 'http://192.168.103.208/Assignment.svc/'
+	base: 'http://192.168.100.175/Assignment.svc/'
 	, login: 'login'
     }
     , places: ['.wrapper']
@@ -217,6 +217,7 @@ $(document).on('click', "#login-anchor", function(e) {
     $.ajax({
 	url: Map.services.base + Map.services.login
 	, data: $("#login-form").serialize()
+	, type: 'post'
 	, success: function(d) {
 	    alert(d);
 	}
