@@ -223,8 +223,8 @@ var Global = {
 };
 var Map = {
     templates: 'data/templates.html'
-    , serviceBase: 'http://192.168.100.241/Assignment.svc/'
-//    , serviceBase: 'http://localhost:91/Assignment.svc/'
+//    , serviceBase: 'http://192.168.100.241/Assignment.svc/'
+    , serviceBase: 'http://localhost:91/Assignment.svc/'
     , places: ['.wrapper']
     , services: {
 	
