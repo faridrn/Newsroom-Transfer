@@ -1,15 +1,17 @@
-<script id="user-template" type="text/x-handlebars-template">
+<script id="userparams-template" type="text/x-handlebars-template">
 	<div class="user">
 		<div class="img">
 			<img src="samples/avatar.jpg" alt="{{Username}}" />
 		</div>
+		{{#each []}}
 		<div class="overlay">
 			<div class="logout">Logout&nbsp;<span class="close">&times;</span></div>
-			<div class="name">Farid Rn</div>
-			<div class="position">Journalist</div>
-			<div class="city">Bucharest, Romaina</div>
-			<div class="company">PressTV</div>
+			<div class="name">{{Name}}</div>
+			<div class="position">{{Initial}}</div>
+			<div class="city">{{City}}, {{Country}}</div>
+			<div class="company">{{ServiceProvider}}</div>
 		</div>
+		{{/each}}
 	</div>
 </script>
 <script id="search-template" type="text/x-handlebars-template">
@@ -28,26 +30,9 @@
 					<div class="results-list" id="results-inner-content">
 						<div class="content">
 							<ul class="list-unstyled">
-								<li class=""><span>Item Title</span></li>
-								<li class="active"><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class="active"><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class="active"><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class="active"><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class="active"><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
-								<li class=""><span>Item Title</span></li>
+								{{#each []}}
+								<li class="" data-id="{{Id}}"><span>{{Title}}</span></li>
+								{{/each}}
 							</ul>
 						</content>
 					</div>
