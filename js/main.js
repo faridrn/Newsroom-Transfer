@@ -73,12 +73,17 @@ var Template = {
 	    }
 	});
     }
-    , compile: function (data, template, position, srvc) {
+    , compile: function (data, template, position, srvc, append) {
+//	console.log(typeof template);
 	var source = template.html();
 	var template = Handlebars.compile(source);
 	var html = template(data);
-	position.html(html);
-	Template.afterCompile(html, srvc);
+	if (typeof append !== "undefined" && append !== "" && append)
+	    position.append(html);
+	else
+	    position.html(html);
+	if (typeof srvc !== "undefined" && srvc !== null)
+	    Template.afterCompile(html, srvc);
     }
     , afterCompile: function (html, srvc) {
 	if (Map.positions[srvc].eventListener === true)
@@ -106,7 +111,7 @@ var Data = {
 	    Template.compile(data, template, position, srvc);
 	}
     }
-    , post: function (srvc, data, template, position, message) {
+    , post: function (srvc, data, template, position, message, nextAction) {
 	if (typeof srvc !== "undefined" && srvc !== "" && srvc) {
 	    var source = Map.positions[srvc].service;
 	    if (data !== null) {
@@ -116,7 +121,7 @@ var Data = {
 		    , type: 'post'
 		    , data: data
 		    , success: function(d) {
-			console.log(d);
+			nextAction(data);
 		    }
 		});
 	    }
@@ -272,6 +277,8 @@ var Bindings = {
 	    $(document).on('click', "#results .content li", function(e) {
 		var id = $(this).attr('data-id');
 		Data.get('conversation', id, $("#conversation-template"), $("#conversation"), '', $(this).text());
+		$("#results .content li").removeClass("active");
+		$(this).addClass("active");
 		e.preventDefault();
 	    });
 	}
@@ -285,9 +292,17 @@ var Bindings = {
 	    $(document).on('click', "#conversation .item-form a.do-send", function(e) {
 		var content = $(this).parent().find("textarea").val();
 		var id = $(this).parent().find("input[type=hidden]").val();
-		Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null);
+		Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null, Bindings.conversation.addItem);
 		e.preventDefault();
 	    });
+	}
+	, addItem: function(a) {
+	    var tmpl = $("#conversation-item-template").html();
+	    var data = {Title: a.Title, UserName: $("#username").val(), CreateDateTime: 'just now'};
+	    var position = $("#conversation .conversation-list .content");
+	    Template.compile(data, $(tmpl), position, null, true);
+	    $("#conversation .item-form textarea").val('');
+	    Bindings.conversation.scrollBottom();
 	}
 	, scrollBottom: function() {
 	    $("#conversation .nano").nanoScroller({ scroll: 'bottom' });

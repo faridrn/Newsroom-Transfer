@@ -4,6 +4,7 @@
 			<img src="samples/avatar.jpg" alt="{{Username}}" />
 		</div>
 		{{#each []}}
+		<input type="hidden" name="username" id="username" value="{{Name}}" />
 		<div class="overlay">
 			<div class="logout">Logout&nbsp;<span class="close">&times;</span></div>
 			<div class="name">{{Name}}</div>
@@ -41,6 +42,20 @@
 		</div>
 	</div>
 </script>
+<script id="conversation-item-template" type="text/x-handlebars-template">
+	<div class="item response">
+		<div class="date"><span>{{CreateDateTime}}</span></div>
+		<div class="media response">
+			<div class="media-body">
+				<h4 class="media-heading">{{UserName}}</h4>
+				<div class="bubble">{{Title}}</div>
+			</div>
+			<div class="media-right">
+				<img class="media-object" src="samples/avatar.jpg" alt="" />
+			</div>
+		</div>
+	</div>
+</script>
 <script id="conversation-template" type="text/x-handlebars-template">
 	<div class="conversation">
 		<div class="page-header">
@@ -56,30 +71,33 @@
 					<div class="conversation-list" id="conversation-inner-content">
 						<div class="content">
 							{{#each []}}
-							<div class="item">
-								<div class="date"><span>{{CreateDateTime}}</span></div>
 								{{#if IsReporter}}
+								<div class="item response">
+									<div class="date"><span>{{CreateDateTime}}</span></div>
 									<div class="media response">
 										<div class="media-body">
 											<h4 class="media-heading">{{UserName}}</h4>
 											<div class="bubble">{{Title}}</div>
 										</div>
 										<div class="media-right">
-											<img class="media-object" src="samples/avatar.jpg" alt="">
+											<img class="media-object" src="samples/avatar.jpg" alt="" />
 										</div>
 									</div>
+								</div>
 								{{else}}
+								<div class="item">
+									<div class="date"><span>{{CreateDateTime}}</span></div>
 									<div class="media">
 										<div class="media-left">
-											<img class="media-object" src="samples/avatar.jpg" alt="">
+											<img class="media-object" src="samples/avatar.jpg" alt="" />
 										</div>
 										<div class="media-body">
 											<h4 class="media-heading">{{UserName}}</h4>
 											<div class="bubble">{{Title}}</div>
 										</div>
 									</div>
+								</div>
 								{{/if}}
-							</div>
 							{{/each}}
 						</div>
 					</div>
