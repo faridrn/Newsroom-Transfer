@@ -3,10 +3,9 @@ $(function () {
     // Check for credentials
     // if user is logged in then start the app
     if (token === '') {
-	console.log('empty token');
 	var cookieToken = Cookie.get();
 	if (cookieToken === '') {
-	    console.log('opening login form');
+	    console.log('User needs to login!');
 	    $("#login-form").modal({
 		backdrop: 'static'
 		, keyboard: false
@@ -24,6 +23,7 @@ $(function () {
 var App = {
     start: function () {
 	App.init();
+	Global.periodicals();
     }
     , init: function () {
 	Global.registerHandlebarHelpers();
@@ -34,14 +34,18 @@ var App = {
 		var $tmpl = $(pos.id + "-template");
 		var $pos = $(pos.id);
 		if ($tmpl.length) {
-//		    console.log(pos.autoload);
-		    if (pos.autoload === true)
+//		    console.log(pos.autoLoad);
+		    if (pos.autoLoad === true)
 			Data.get(pos.template, null, $tmpl, $pos, null);
-		    else
-			Data.get(null, null, $tmpl, $pos, null);
+//		    else
+			//Data.get(null, null, $tmpl, $pos, null);
 		}
 	    });
 	}
+    }
+    , close: function() {
+	Cookie.delete();
+	Location.refresh();
     }
 };
 var Template = {
@@ -69,14 +73,16 @@ var Template = {
 	    }
 	});
     }
-    , compile: function (data, template, position) {
+    , compile: function (data, template, position, srvc) {
 	var source = template.html();
 	var template = Handlebars.compile(source);
 	var html = template(data);
 	position.html(html);
-	Template.afterCompile(html);
+	Template.afterCompile(html, srvc);
     }
-    , afterCompile: function (html) {
+    , afterCompile: function (html, srvc) {
+	if (Map.positions[srvc].eventListener === true)
+	    Bindings[Map.positions[srvc].template].init();
 	if (html.indexOf("\"nano") !== -1)
 	    $(".nano").nanoScroller({flash: true, preventPageScrolling: true, tabIndex: 0});
     }
@@ -84,23 +90,37 @@ var Template = {
 var Data = {
     get: function (srvc, data, template, position, message) {
 	if (typeof srvc !== "undefined" && srvc !== "" && srvc) {
-	    console.log(srvc);
 	    var source = Map.positions[srvc].service;
+	    if (data !== null)
+		source += '/' + data;
 	    $.ajax({
 		url: Map.serviceBase + source
 		, headers: {"Authorization": token}
 		, success: function(d) {
 		    var data = JSON.parse(d);
-		    Template.compile(data, template, position);
+		    Template.compile(data, template, position, srvc);
 		}
 	    });
 	} else {
 	    data = [];
-	    Template.compile(data, template, position);
+	    Template.compile(data, template, position, srvc);
 	}
     }
-    , post: function (service, data, template, position, message) {
-	return false;
+    , post: function (srvc, data, template, position, message) {
+	if (typeof srvc !== "undefined" && srvc !== "" && srvc) {
+	    var source = Map.positions[srvc].service;
+	    if (data !== null) {
+		$.ajax({
+		    url: Map.serviceBase + Map.positions[srvc].service
+		    , headers: {"Authorization": token}
+		    , type: 'post'
+		    , data: data
+		    , success: function(d) {
+			console.log(d);
+		    }
+		});
+	    }
+	}
     }
     , put: function (service, data, template, position, message) {
 	return false;
@@ -220,22 +240,66 @@ var Global = {
 	    return $el.html();
 	});
     }
+    , periodicals: function() {
+	// Cookie extend
+	window.setInterval(function() {
+	    Cookie.extend(Cookie.title, token);
+	}, 10000);
+    }
 };
 var Map = {
     templates: 'data/templates.html'
-//    , serviceBase: 'http://192.168.100.241/Assignment.svc/'
-    , serviceBase: 'http://localhost:91/Assignment.svc/'
-    , places: ['.wrapper']
+//    , serviceBase: 'http://192.168.101.46/Assignment.svc/'
+    , serviceBase: 'http://192.168.101.154:91/Assignment.svc/'
+    , places: [".wrapper"]
     , services: {
 	
     }
     , login: { service: "login" }
     , positions: {
-//	user: {id: "#user", template: "user", service: "login"}
-	userparams: {id: "#userparams", template: 'userparams', service: "UserParams", autoload: true}
-	, search: {id: "#search", template: "search", autoload: false}
-	, results: {id: "#results", template: "results", service: "AssignmentItemGetAll", autoload: true}
-	, conversation: {id: "#conversation", template: "conversation", service: "AssignmentItemDetGetAll/{id}", autoload: false}
+	userparams: {id: "#userparams", template: 'userparams', service: 'UserParams', autoLoad: true, eventListener: false}
+	, results: {id: "#results", template: "results", service: 'AssignmentItemGetAll', autoLoad: true, eventListener: true}
+	, conversation: {id: "#conversation", template: "conversation", service: 'AssignmentItemDetGetAll', autoLoad: false, eventListener: true}
+	, assignment: {id: "", template: "", service: 'AssignmentItemDetCreate', autoLoad: false, eventListener: false}
+    }
+};
+var Bindings = {
+    results: {
+	init: function() {
+	    Bindings.results.click();
+	}
+	, click: function() {
+	    $(document).on('click', "#results .content li", function(e) {
+		var id = $(this).attr('data-id');
+		Data.get('conversation', id, $("#conversation-template"), $("#conversation"), '', $(this).text());
+		e.preventDefault();
+	    });
+	}
+    }
+    , conversation: {
+	init: function() {
+	    Bindings.conversation.scrollBottom();
+	    Bindings.conversation.add();
+	}
+	, add: function() {
+	    $(document).on('click', "#conversation .item-form a.do-send", function(e) {
+		var content = $(this).parent().find("textarea").val();
+		var id = $(this).parent().find("input[type=hidden]").val();
+		Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null);
+		e.preventDefault();
+	    });
+	}
+	, scrollBottom: function() {
+	    $("#conversation .nano").nanoScroller({ scroll: 'bottom' });
+	}
+    }
+    , userParams: {
+	init: function() {
+	    Bindings.results.fillParams();
+	}
+	, fillParams: function() {
+	    
+	}
     }
 };
 var Cookie = {
@@ -261,6 +325,10 @@ var Cookie = {
 	var expires = 'Thu, 01 Jan 1970 00:00:01 GMT';
 	document.cookie = cname + '' + '; ' + expires + '; path=/';
     }
+    , extend: function (cname, data) {
+	console.log('extending user session');
+	Cookie.set(cname, data);
+    }
     , set: function (cname, data) {
 	if (typeof cname === 'undefined')
 	    var cname = Cookie.title;
@@ -285,6 +353,7 @@ var Cookie = {
     }
 };
 
+// Login and logout
 $(document).on('click', "#login-anchor", function (e) {
     // request for token
     var s = false;
@@ -295,7 +364,6 @@ $(document).on('click', "#login-anchor", function (e) {
 	, success: function (d) {
 	    if (d !== "") {
 		token = d;
-		///////////////////////////////////////
 		$("#login-form").find(".alert").addClass('hide');
 		$("#login-form").modal('hide');
 		Cookie.set(Cookie.title, d);
@@ -309,6 +377,8 @@ $(document).on('click', "#login-anchor", function (e) {
     });
     e.preventDefault();
     return false;
+}).on('click', ".logout", function (e) {
+    App.close();
 }).on('focusin', "#login-form form:first", function () {
     $("#login-form").find(".alert").slideUp(function () {
 	$("#login-form").find(".alert").addClass('hide');
