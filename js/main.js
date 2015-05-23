@@ -292,6 +292,8 @@ var Bindings = {
 	    $(document).on('click', "#conversation .item-form a.do-send", function(e) {
 		var content = $(this).parent().find("textarea").val();
 		var id = $(this).parent().find("input[type=hidden]").val();
+		if (typeof id === "undefined" || id === null)
+		    id = $("#results").find("li.active").attr('data-id');
 		Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null, Bindings.conversation.addItem);
 		e.preventDefault();
 	    });
