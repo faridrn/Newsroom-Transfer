@@ -44,85 +44,43 @@
 <script id="conversation-template" type="text/x-handlebars-template">
 	<div class="conversation">
 		<div class="page-header">
-			<h3>Conversation Title</h3>
+			{{#each []}}
+				{{#if @first}}
+					<h3>{{ItemTitle}}</h3>
+				{{/if}}
+			{{/each}}
 		</div>
 		<div id="conversation-content" class="conversation-container">
 			<div class="nano has-scrollbar">
 				<div class="overthrow nano-content">
 					<div class="conversation-list" id="conversation-inner-content">
 						<div class="content">
+							{{#each []}}
 							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media">
-									<div class="media-left">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
+								<div class="date"><span>{{CreateDateTime}}</span></div>
+								{{#if IsReporter}}
+									<div class="media response">
+										<div class="media-body">
+											<h4 class="media-heading">{{UserName}}</h4>
+											<div class="bubble">{{Title}}</div>
+										</div>
+										<div class="media-right">
+											<img class="media-object" src="samples/avatar.jpg" alt="">
+										</div>
 									</div>
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+								{{else}}
+									<div class="media">
+										<div class="media-left">
+											<img class="media-object" src="samples/avatar.jpg" alt="">
+										</div>
+										<div class="media-body">
+											<h4 class="media-heading">{{UserName}}</h4>
+											<div class="bubble">{{Title}}</div>
+										</div>
 									</div>
-								</div>
+								{{/if}}
 							</div>
-							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media response">
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-									</div>
-									<div class="media-right">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media">
-									<div class="media-left">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
-									</div>
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media response">
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-									</div>
-									<div class="media-right">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media">
-									<div class="media-left">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
-									</div>
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-									</div>
-								</div>
-							</div>
-							<div class="item">
-								<div class="date"><span>3:03 PM</span></div>
-								<div class="media response">
-									<div class="media-body">
-										<h4 class="media-heading">Farid Rn</h4>
-										<div class="bubble">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-									</div>
-									<div class="media-right">
-										<img class="media-object" src="samples/avatar.jpg" alt="">
-									</div>
-								</div>
-							</div>
+							{{/each}}
 						</div>
 					</div>
 				</div>
@@ -131,6 +89,11 @@
 		<hr />
 		<div class="item-form">
 			<div class="form-group">
+				{{#each []}}
+					{{#if @first}}
+						<input type="hidden" name="AssignmentItemId" value="{{AssignmentItemId}}" />
+					{{/if}}
+				{{/each}}
 				<textarea id="item-textarea" rows="2" class="form-control" placeholder="Message..."></textarea>
 				<a href="#" class="do-send btn btn-primary">Send</a>
 			</div>
