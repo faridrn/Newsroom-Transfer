@@ -266,6 +266,15 @@ var Global = {
 	window.setInterval(function () {
 	    Cookie.extend(Cookie.title, token);
 	}, 10000);
+	// refresh conversation panel
+	window.setInterval(function () {
+	    var $tmpl = $("#conversation-template");
+	    var $pos = $("#conversation");
+	    var id = $("input[name=AssignmentItemId]").val();
+	    if (typeof id !== "undefined" && id !== null && id)
+		if ($tmpl.length)
+		    Data.get("conversation", id, $tmpl, $pos, null);
+	}, 10000);
     }
 };
 var Map = {
@@ -356,6 +365,9 @@ var Bindings = {
 	}
 	, scrollBottom: function () {
 	    $("#conversation .nano").nanoScroller({scroll: 'bottom'});
+	}
+	, loadList: function () {
+	    
 	}
     }
     , userParams: {
@@ -451,18 +463,18 @@ $(document).on('click', "#login-anchor", function (e) {
 });
 
 // Serialize Object Plugin
-$.fn.serializeObject = function() { // serializeArray - serialize form as an array instead of default object
+$.fn.serializeObject = function () { // serializeArray - serialize form as an array instead of default object
     var o = {};
     var a = this.serializeArray();
-    $.each(a, function() {
-        if (o[this.name] !== undefined) {
-            if (!o[this.name].push) {
-                o[this.name] = [o[this.name]];
-            }
-            o[this.name].push(this.value || '');
-        } else {
-            o[this.name] = this.value || '';
-        }
+    $.each(a, function () {
+	if (o[this.name] !== undefined) {
+	    if (!o[this.name].push) {
+		o[this.name] = [o[this.name]];
+	    }
+	    o[this.name].push(this.value || '');
+	} else {
+	    o[this.name] = this.value || '';
+	}
     });
     return o;
 };
