@@ -255,8 +255,8 @@ var Global = {
 };
 var Map = {
     templates: 'data/templates.html'
-//    , serviceBase: 'http://192.168.101.46/Assignment.svc/'
-    , serviceBase: 'http://192.168.101.154:91/Assignment.svc/'
+    , serviceBase: 'http://192.168.101.46/Assignment.svc/'
+//    , serviceBase: 'http://192.168.101.154:91/Assignment.svc/'
     , places: [".wrapper"]
     , services: {
     }
@@ -267,6 +267,7 @@ var Map = {
 	, thread: {id: "#results", template: "results", service: 'AssignmentItemCreate', autoLoaf: false, eventListener: false}
 	, conversation: {id: "#conversation", template: "conversation", service: 'AssignmentItemDetGetAll', autoLoad: false, eventListener: true}
 	, assignment: {id: "", template: "", service: 'AssignmentItemDetCreate', autoLoad: false, eventListener: false}
+	, finalform: {id: "#final-form", template: "finalform", service: 'AssignmentItemGetById', autoLoad: false, eventListener: false}
     }
 };
 var Bindings = {
@@ -279,12 +280,14 @@ var Bindings = {
 	    $(document).on('click', "#results .content li", function (e) {
 		var id = $(this).attr('data-id');
 		Data.get('conversation', id, $("#conversation-template"), $("#conversation"), '', $(this).text());
+		Data.get('finalform', id, $("#finalform-template"), $("#final-form"), '', null);
 		$("#results .content li").removeClass("active");
 		$(this).addClass("active");
 		e.preventDefault();
 	    });
 	}
 	, add: function () {
+	    $(document).off('submit', "#search form");
 	    $(document).on('submit', "#search form", function (e) {
 		var data = {Title: $(this).find("#create-input").val()};
 		Data.post('thread', data, null, null, null, Bindings.results.afterAdd);
@@ -302,6 +305,7 @@ var Bindings = {
 	    Bindings.conversation.add();
 	}
 	, add: function () {
+	    $(document).off('click', "#conversation .item-form a.do-send");
 	    $(document).on('click', "#conversation .item-form a.do-send", function (e) {
 		var content = $(this).parent().find("textarea").val();
 		if (content !== "") {

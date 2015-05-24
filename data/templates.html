@@ -56,6 +56,38 @@
 		</div>
 	</div>
 </script>
+<script id="finalform-template" type="text/x-handlebars-template">
+	<div class="page-header">
+		<h3>Final Form</h3>
+	</div>
+	{{#each []}}
+		<form action="#" class="" role="form">
+			<label for="url">URL</label>
+			<div class="form-group">
+				<input type="text" name="url" class="form-control" placeholder="URL" value="{{Url}}" />
+			</div>
+			<label for="ptc">PTC</label>
+			<div class="form-group">
+				<textarea name="ptc" class="form-control" rows="3" placeholder="PTC">{{PTC}}</textarea>
+			</div>
+			<label for="narration">Narration</label>
+			<div class="form-group">
+				<textarea name="naration" class="form-control" rows="3" placeholder="Narration">{{Narration}}</textarea>
+			</div>
+			<label for="voice">Voice</label>
+			<div class="form-group">
+				<textarea name="voice" class="form-control" rows="3" placeholder="Voice">{{Voice}}</textarea>
+			</div>
+			<label for="title">Experts Name</label>
+			<div class="form-group">
+				<textarea name="title" class="form-control" rows="3" placeholder="Experts Name">{{Experts}}</textarea>
+			</div>
+			<div class="form-group text-right">
+				<button type="submit" class="btn btn-success">Send</button>
+			</div>
+		</form>
+	{{/each}}
+</script>
 <script id="conversation-template" type="text/x-handlebars-template">
 	<div class="conversation">
 		<div class="page-header">

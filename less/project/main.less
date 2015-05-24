@@ -105,6 +105,15 @@ body {
     }
 }
 #right {
-    padding-top: 20px 0 40px; height: 100%; margin-top: -65px;
+    padding-bottom: 65px; height: 100%; margin-top: -45px; overflow: hidden;
     .chevron { float: right; margin-right: 20px; width: 40px; height: 40px; text-align: center; cursor: pointer; }
+    #final-form {
+	padding: 0; height: 100%;
+	.page-header { margin: 0; margin-bottom: 30px; }
+	form {
+	    height: 100%; overflow: auto; overflow-x: hidden; padding-right: 10px;
+	    textarea { resize: none; }
+	    label { display: none; }
+	}
+    }
 }
