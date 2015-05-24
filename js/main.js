@@ -271,6 +271,7 @@ var Global = {
 var Map = {
     templates: 'data/templates.html'
     , serviceBase: 'http://192.168.101.46/Assignment.svc/'
+    , mediaBase: 'http://192.168.101.46/images'
 //    , serviceBase: 'http://192.168.101.154:91/Assignment.svc/'
     , places: [".wrapper"]
     , services: {
@@ -347,7 +348,7 @@ var Bindings = {
 	}
 	, addItem: function (a) {
 	    var tmpl = $("#conversation-item-template").html();
-	    var data = {Title: a.Title, UserName: $("#username").val(), CreateDateTime: 'just now'};
+	    var data = {Title: a.Title, UserName: $("#username").val(), CreateDateTime: 'just now', CreateUserID: $("#userid").val()};
 	    var position = $("#conversation .conversation-list .content");
 	    Template.compile(data, $(tmpl), position, null, true);
 	    $("#conversation .item-form textarea").val('');

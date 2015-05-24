@@ -14,7 +14,7 @@ body {
     .user {
 	position: relative; margin-bottom: 30px; z-index: 121;
 	.img {
-	    float: left; width: 80px;
+	    float: left; width: 80px; height: 80px; overflow: hidden;
 	    img { display: block; }
 	}
 	.overlay {
@@ -90,6 +90,7 @@ body {
     .media {
 	margin-bottom: 20px; margin-top: 0;
 	.media-object { width: 50px; }
+	.media-right, .media-left { height: 50px; overflow: hidden; }
 	.media-heading { font-size: 14px; text-indent: 10px; }
 	.bubble {
 	    background: @gray-lighter; padding: 5px; font-size: 12px; position: relative; margin-left: 10px; z-index: 79;
