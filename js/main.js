@@ -122,14 +122,29 @@ var Data = {
 		    , type: 'post'
 		    , data: data
 		    , success: function (d) {
-			nextAction(data);
+			if (nextAction)
+			    nextAction(data);
 		    }
 		});
 	    }
 	}
     }
-    , put: function (srvc, data, template, position, message) {
-	return false;
+    , put: function (srvc, data, template, position, message, nextAction) {
+	if (typeof srvc !== "undefined" && srvc !== "" && srvc) {
+	    var source = Map.positions[srvc].service;
+	    if (data !== null) {
+		$.ajax({
+		    url: Map.serviceBase + Map.positions[srvc].service
+		    , headers: {"Authorization": token}
+		    , type: 'put'
+		    , data: data
+		    , success: function (d) {
+			if (nextAction)
+			    nextAction(data);
+		    }
+		});
+	    }
+	}
     }
 };
 var Location = {
@@ -268,6 +283,7 @@ var Map = {
 	, conversation: {id: "#conversation", template: "conversation", service: 'AssignmentItemDetGetAll', autoLoad: false, eventListener: true}
 	, assignment: {id: "", template: "", service: 'AssignmentItemDetCreate', autoLoad: false, eventListener: false}
 	, finalform: {id: "#final-form", template: "finalform", service: 'AssignmentItemGetById', autoLoad: false, eventListener: false}
+	, finalformcreate: {id: "#final-form", template: "finalformcreate", service: 'AssignmentItemUpdate', autoLoad: false, eventListener: false}
     }
 };
 var Bindings = {
@@ -275,8 +291,10 @@ var Bindings = {
 	init: function () {
 	    Bindings.results.click();
 	    Bindings.results.add();
+	    Bindings.results.handleForm();
 	}
 	, click: function () {
+	    $(document).off('click', "#results .content li");
 	    $(document).on('click', "#results .content li", function (e) {
 		var id = $(this).attr('data-id');
 		Data.get('conversation', id, $("#conversation-template"), $("#conversation"), '', $(this).text());
@@ -297,6 +315,16 @@ var Bindings = {
 	}
 	, afterAdd: function (data) {
 	    Data.get('results', null, $(Map.positions.results.id + "-template"), $(Map.positions.results.id), null);
+	}
+	, handleForm: function () {
+	    $(document).off('submit', "#final-form form");
+	    $(document).on('submit', "#final-form form", function (e) {
+		var data = $(this).serializeObject();
+		console.log(data);
+		Data.put('finalformcreate', data, null, null, null);
+		e.preventDefault();
+		return false;
+	    });
 	}
     }
     , conversation: {
@@ -420,3 +448,20 @@ $(document).on('click', "#login-anchor", function (e) {
 	$("#login-form").find(".alert").addClass('hide');
     });
 });
+
+// Serialize Object Plugin
+$.fn.serializeObject = function() { // serializeArray - serialize form as an array instead of default object
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
