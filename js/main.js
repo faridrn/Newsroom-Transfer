@@ -38,12 +38,12 @@ var App = {
 		    if (pos.autoLoad === true)
 			Data.get(pos.template, null, $tmpl, $pos, null);
 //		    else
-			//Data.get(null, null, $tmpl, $pos, null);
+		    //Data.get(null, null, $tmpl, $pos, null);
 		}
 	    });
 	}
     }
-    , close: function() {
+    , close: function () {
 	Cookie.delete();
 	Location.refresh();
     }
@@ -75,7 +75,7 @@ var Template = {
     }
     , compile: function (data, template, position, srvc, append) {
 //	console.log(typeof template);
-	var source = template.html();
+	var source = template.html(); // template is object
 	var template = Handlebars.compile(source);
 	var html = template(data);
 	if (typeof append !== "undefined" && append !== "" && append)
@@ -93,6 +93,7 @@ var Template = {
     }
 };
 var Data = {
+//    Data.get('results', null, $(Map.positions.results.template), Map.positions.results.id, null);
     get: function (srvc, data, template, position, message) {
 	if (typeof srvc !== "undefined" && srvc !== "" && srvc) {
 	    var source = Map.positions[srvc].service;
@@ -101,7 +102,7 @@ var Data = {
 	    $.ajax({
 		url: Map.serviceBase + source
 		, headers: {"Authorization": token}
-		, success: function(d) {
+		, success: function (d) {
 		    var data = JSON.parse(d);
 		    Template.compile(data, template, position, srvc);
 		}
@@ -120,14 +121,14 @@ var Data = {
 		    , headers: {"Authorization": token}
 		    , type: 'post'
 		    , data: data
-		    , success: function(d) {
+		    , success: function (d) {
 			nextAction(data);
 		    }
 		});
 	    }
 	}
     }
-    , put: function (service, data, template, position, message) {
+    , put: function (srvc, data, template, position, message) {
 	return false;
     }
 };
@@ -245,9 +246,9 @@ var Global = {
 	    return $el.html();
 	});
     }
-    , periodicals: function() {
+    , periodicals: function () {
 	// Cookie extend
-	window.setInterval(function() {
+	window.setInterval(function () {
 	    Cookie.extend(Cookie.title, token);
 	}, 10000);
     }
@@ -258,23 +259,24 @@ var Map = {
     , serviceBase: 'http://192.168.101.154:91/Assignment.svc/'
     , places: [".wrapper"]
     , services: {
-	
     }
-    , login: { service: "login" }
+    , login: {service: "login"}
     , positions: {
 	userparams: {id: "#userparams", template: 'userparams', service: 'UserParams', autoLoad: true, eventListener: false}
 	, results: {id: "#results", template: "results", service: 'AssignmentItemGetAll', autoLoad: true, eventListener: true}
+	, thread: {id: "#results", template: "results", service: 'AssignmentItemCreate', autoLoaf: false, eventListener: false}
 	, conversation: {id: "#conversation", template: "conversation", service: 'AssignmentItemDetGetAll', autoLoad: false, eventListener: true}
 	, assignment: {id: "", template: "", service: 'AssignmentItemDetCreate', autoLoad: false, eventListener: false}
     }
 };
 var Bindings = {
     results: {
-	init: function() {
+	init: function () {
 	    Bindings.results.click();
+	    Bindings.results.add();
 	}
-	, click: function() {
-	    $(document).on('click', "#results .content li", function(e) {
+	, click: function () {
+	    $(document).on('click', "#results .content li", function (e) {
 		var id = $(this).attr('data-id');
 		Data.get('conversation', id, $("#conversation-template"), $("#conversation"), '', $(this).text());
 		$("#results .content li").removeClass("active");
@@ -282,23 +284,36 @@ var Bindings = {
 		e.preventDefault();
 	    });
 	}
+	, add: function () {
+	    $(document).on('submit', "#search form", function (e) {
+		var data = {Title: $(this).find("#create-input").val()};
+		Data.post('thread', data, null, null, null, Bindings.results.afterAdd);
+		e.preventDefault();
+		return false;
+	    });
+	}
+	, afterAdd: function (data) {
+	    Data.get('results', null, $(Map.positions.results.id + "-template"), $(Map.positions.results.id), null);
+	}
     }
     , conversation: {
-	init: function() {
+	init: function () {
 	    Bindings.conversation.scrollBottom();
 	    Bindings.conversation.add();
 	}
-	, add: function() {
-	    $(document).on('click', "#conversation .item-form a.do-send", function(e) {
+	, add: function () {
+	    $(document).on('click', "#conversation .item-form a.do-send", function (e) {
 		var content = $(this).parent().find("textarea").val();
-		var id = $(this).parent().find("input[type=hidden]").val();
-		if (typeof id === "undefined" || id === null)
-		    id = $("#results").find("li.active").attr('data-id');
-		Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null, Bindings.conversation.addItem);
+		if (content !== "") {
+		    var id = $(this).parent().find("input[type=hidden]").val();
+		    if (typeof id === "undefined" || id === null)
+			id = $("#results").find("li.active").attr('data-id');
+		    Data.post('assignment', {Title: content, AssignmentItemId: id}, null, null, null, Bindings.conversation.addItem);
+		}
 		e.preventDefault();
 	    });
 	}
-	, addItem: function(a) {
+	, addItem: function (a) {
 	    var tmpl = $("#conversation-item-template").html();
 	    var data = {Title: a.Title, UserName: $("#username").val(), CreateDateTime: 'just now'};
 	    var position = $("#conversation .conversation-list .content");
@@ -306,16 +321,16 @@ var Bindings = {
 	    $("#conversation .item-form textarea").val('');
 	    Bindings.conversation.scrollBottom();
 	}
-	, scrollBottom: function() {
-	    $("#conversation .nano").nanoScroller({ scroll: 'bottom' });
+	, scrollBottom: function () {
+	    $("#conversation .nano").nanoScroller({scroll: 'bottom'});
 	}
     }
     , userParams: {
-	init: function() {
+	init: function () {
 	    Bindings.results.fillParams();
 	}
-	, fillParams: function() {
-	    
+	, fillParams: function () {
+
 	}
     }
 };
