@@ -272,8 +272,7 @@ var Global = {
 	    var $pos = $("#conversation");
 	    var id = $("input[name=AssignmentItemId]").val();
 	    if (typeof id !== "undefined" && id !== null && id)
-		if ($tmpl.length)
-		    Data.get("conversation", id, $tmpl, $pos, null);
+		Data.get("conversation", id, $tmpl, $pos, null);
 	}, 10000);
     }
 };
